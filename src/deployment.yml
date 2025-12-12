@@ -1,20 +1,20 @@
 apiVersion: v1
-kind: PersistentVolumeClain
+kind: PersistentVolumeClaim
 metadata:
   name: mysql-dados
-spec: 
+spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: standard-two   # verifique o nome exato da sua StorageClass
   resources:
-    request:
-      storage: 0.1Gi
-    storageClassName: standart-two
+    requests:
+      storage: 1Gi
 
 ---
 
 apiVersion: apps/v1
 kind: Deployment
-metadata: 
+metadata:
   name: mysql
 spec:
   selector:
@@ -25,7 +25,7 @@ spec:
       labels:
         app: mysql
     spec:
-      container:
+      containers:
       - image: pedro/projeto-database:1.0
         args:
         - "--ignore-db-dir=lost+found"
@@ -34,18 +34,17 @@ spec:
         ports:
         - containerPort: 3306
           name: mysql
-        
         volumeMounts:
         - name: mysql-dados
           mountPath: /var/lib/mysql/
       volumes:
       - name: mysql-dados
-        persistentVolumeClain:
+        persistentVolumeClaim:
           claimName: mysql-dados
 
 ---
 
-apiVersion: apps/vi
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: php

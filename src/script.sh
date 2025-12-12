@@ -12,8 +12,8 @@ docker push pedroms96/projeto-database:1.0
 
 echo "Criando serviços"
 
-kubectl apply -f ./services.yml
+sudo kubectl apply -f ./services.yml
 
 echo "Criando os deployments"
 
-kubectl apply -f ./deployment.yml --validate=false
+sudo kubectl apply -f ./deployment.yml
